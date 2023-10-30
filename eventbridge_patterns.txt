@@ -1,0 +1,91 @@
+EVENTBRIDGE PATTERNS Needed to deploy these.
+
+AWS EKS cluster endpoint access should not be publicly enabled - AUTOREMEDATION
+
+    event_pattern = jsonencode({
+    "source" : ["aws.eks"],
+    "detail-type" : ["AWS API Call via CloudTrail"],
+    "detail" : {
+        "eventSource": ["eks.amazonaws.com"],
+        "eventName" : ["CreateCluster", "UpdateClusterConfig"]
+    }
+    })
+
+
+
+AWS Elasticsearch Domain must not be publicly accessible - AUTODESTROY
+
+event_pattern = jsonencode({
+  "source" : ["aws.es"],
+  "detail-type" : ["AWS API Call via CloudTrail"],
+  "detail" : {
+    "eventSource": ["es.amazonaws.com"],
+    "eventName" : ["CreateElasticsearchDomain", "UpdateElasticsearchDomainConfig"]
+  }
+})
+
+
+AWS KMS CMKs must be automatically rotated once per year - AUTOREMEDIATION
+
+event_pattern = jsonencode({
+  "source" : ["aws.kms"],
+  "detail-type" : ["AWS API Call via CloudTrail"],
+  "detail" : {
+    "eventSource": ["kms.amazonaws.com"],
+    "eventName" : ["CreateKey", "PutKeyPolicy"]
+  }
+})
+
+
+
+
+AWS RDS instances must not be publicly accessible - AUTOREMEDIATE
+
+event_pattern = jsonencode({
+  "source" : ["aws.rds"],
+  "detail-type" : ["AWS API Call via CloudTrail"],
+  "detail" : {
+    "eventSource": ["rds.amazonaws.com"],
+    "eventName" : ["CreateDBInstance", "ModifyDBInstance", "RestoreDBInstanceFromDBSnapshot"]
+  }
+})
+
+
+
+
+AWS Redshift clusters must not be publicly accessible - AUTOREMEDIATE
+
+event_pattern = jsonencode({
+  "source" : ["aws.redshift"],
+  "detail-type" : ["AWS API Call via CloudTrail"],
+  "detail" : {
+    "eventSource": ["redshift.amazonaws.com"],
+    "eventName" : ["CreateCluster", "ModifyCluster", "RestoreFromClusterSnapshot"]
+  }
+})
+
+
+
+ECR Repositories must not be publicly accessible - AUTODESTROY
+
+event_pattern = jsonencode({
+  "source" : ["aws.ecr"],
+  "detail-type" : ["AWS API Call via CloudTrail"],
+  "detail" : {
+    "eventSource": ["ecr.amazonaws.com"],
+    "eventName" : ["SetRepositoryPolicy", "CreateRepository"]
+  }
+})
+
+
+
+# ScanOnPush
+
+event_pattern = jsonencode({
+  "source" : ["aws.ecr"],
+  "detail-type" : ["AWS API Call via CloudTrail"],
+  "detail" : {
+    "eventSource": ["ecr.amazonaws.com"],
+    "eventName" : ["PutImageScanningConfiguration", "CreateRepository"]
+  }
+})
